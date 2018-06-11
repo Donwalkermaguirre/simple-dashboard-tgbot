@@ -40,7 +40,7 @@ def plot_test():
     print username
     data_raw=get_db_user_data_dic(username,db)
     data=data_pack_hist(data_raw)
-    fig=plt.figure(0)
+    fig=plt.figure()
     plt.hist(data)
     json01 = json.dumps(mpld3.fig_to_dict(fig))
     json02 = json.dumps(mpld3.fig_to_dict(fig))
