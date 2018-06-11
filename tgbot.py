@@ -8,7 +8,7 @@ import requests
 import logging
 import time
 from datetime import datetime
-TOKEN = '553928486:AAEuz0259OIqMy1ZDpc0YV6gWPAIZV-afvk'
+TOKEN = '<bot token>'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 db = sqlite3.connect('mydb')
 db2=sqlite3.connect('mydb_nonhashed')
