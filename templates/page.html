@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rio Olympics 2016</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+
+</head>
+<body>
+<div id="chartContainer">
+		<script type="text/javascript">
+			var svg = dimple.newSvg("#chartContainer",2000,410);//creating a SVG with given size
+			d3.csv("timedata",function(data)// function called when athlets.csv is done loading
+			{
+				console.log("done loading");
+				var chart = new dimple.chart(svg,data); // getting a Chart instance to draw on
+				var x=chart.addMeasureAxis("x","data"); // setting the x axis to show the sports
+				chart.addMeasureAxis("y","count"); // setting the y axis to show the no. of golds own
+				//chart.addSeries("data",dimple.plot.bar); // plotting, with nationality as series.
+				x.addOrderRule("data",false);
+				chart.draw();
+			});
+		</script>
+	</div>
+</body>
+</html>
