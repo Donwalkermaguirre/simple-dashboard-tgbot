@@ -1,9 +1,10 @@
 
-from flask import Flask, request,render_template,g,session,render_template #import main Flask class and request object
+from flask import Flask, request,render_template,g,session,render_template,flash,url_for,redirect #import main Flask class and request object
 import logging
 import sqlite3
 import matplotlib.pyplot as plt
 import mpld3
+from werkzeug.urls import url_parse
 import json
 from Utils2 import check_validity,insert_db_dataset,is_authentified,retrieve_db,is_authentified_session,get_db_user_data_dic,data_pack_hist
 logging.basicConfig(format='\n %(asctime)s - %(name)s - %(levelname)s - %(message)s\n',
@@ -104,19 +105,28 @@ def plot_page():
 		s="<div>{}   {}</div>".format(d['typeplot'],d['data'])+s
 	return s
 
-	
+
+@app.route('/', methods=['GET', 'POST']) #allow both GET and POST requests	
+def index():
+	return "SOON TO BE INDEX"
 
 @app.route('/login', methods=['GET', 'POST']) #allow both GET and POST requests
 def login():
     db=get_db()
     islog=False
+    logger.debug('Login request object values {}'.format(request.values))
+    logger.debug('Login request.form.values:{}'.format(request.form.values()))
     try:
         islog=session['is_logged']
         logger.debug('Login- islog value:{}'.format(islog))
     except Exception as e:
         logger.debug('Login- Not is logged in islog')
     if islog:
-        return "Soon to be index/graphics"
+		next_page = request.args.get('next')
+		if not next_page or url_parse(next_page).netloc != '':
+			next_page = url_for('index')
+		return redirect(next_page)
+        #return "Soon to be index/graphics"
     elif ((not islog) and request.method == 'POST'):
         username=request.form['username']
         password=request.form['password']
@@ -127,7 +137,7 @@ def login():
             session['is_logged']=True
             logger.debug('stored session username and password:{}'.format(session['username'],session['password']))
         else:
-            return "invalid credentials"
+            flash('Invalid credentials')
     return render_template('login.html')
 
 

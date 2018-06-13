@@ -1,6 +1,7 @@
 import sqlite3
 import hashlib
 import logging
+from flask import redirect,url_for
 from functools import wraps
 logging.basicConfig(format='\n %(asctime)s - %(name)s - %(levelname)s - %(message)s\n',level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -157,10 +158,10 @@ def is_authentified_session(session,dbs):
             if ('username' in session) and ('password' in session):                
                 isuser=bool(check_validity(session['username'],session['password'],db))
                 logger.debug('is_authentified_session user found:{}'.format(isuser))
-                if not isuser:
-                    return "Login please"
+                if not isuser: #redireect maps urls, with redirect( url_for(endpoint) we map endpoints (functions)
+                    return redirect(url_for('login'))
             else:
-				return "login please"
+				return redirect(url_for('login'))
             return f(*args,**kwargs)
         return decorated_function
     return decorator
